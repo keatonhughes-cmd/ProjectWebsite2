@@ -379,14 +379,14 @@
        <!-- =================================================================
         | 5. CART PAGE (Cart_Page.png)
         ================================================================== -->
-        <div id="cart-page" class="page-view p-4 md:p-10 relative">
+            <div id="cart-page" class="page-view p-4 md:p-10 relative">
             <header class="flex justify-start items-center mb-6">
                 <button class="btn-bsu" onclick="showPage('store-page')">Back</button>
             </header>
             
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-grow">
                 <!-- Left Column: Cart Items List -->
-                <div class="lg:col-span-2 space-y-4 overflow-y-auto max-h-[80vh]">
+                <div class="lg:col-span-2 space-y-4 overflow-y-auto max-h-[80vh] p-4 bg-white rounded-lg shadow-lg"> <!-- Added bg-white and shadow-lg for visual separation -->
                     <h2 class="text-3xl font-bold text-bsu-dark mb-4 border-b pb-2" style="border-color: var(--bsu-red);">Shopping Cart</h2>
                     <div id="cart-items-list" class="space-y-6">
                         <!-- Cart items rendered by JS -->
@@ -410,7 +410,7 @@
                 </div>
             </div>
         </div>
-
+      
     <!-- =================================================================
     | 6. ABOUT US PAGE (About_Us.png)
     ================================================================== -->
