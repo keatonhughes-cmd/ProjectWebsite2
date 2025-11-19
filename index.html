@@ -375,131 +375,41 @@
     </script>
 
 
-    <!-- =================================================================
-    | 5. CART PAGE (Cart_Page.png)
-    ================================================================== -->
-    <div id="cart-page" class="page-view p-4 md:p-12 max-w-3xl mx-auto">
-        <div class="flex justify-between items-start mb-8">
-            <button class="btn-dark px-6 py-2 rounded-md" onclick="goBack()">Back</button>
-            <i class="fas fa-shopping-cart text-7xl text-gray-800"></i>
-        </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <!-- Left Column: Cart Items -->
-            <div id="cart-items-container" class="md:col-span-2 space-y-6">
-                <!-- Cart Items rendered by JS -->
-                <p id="empty-cart-message" class="text-gray-500 italic text-center text-lg">Your cart is empty.</p>
-            </div>
-
-            <!-- Right Column: Summary & Checkout -->
-            <div class="md:col-span-1 text-center border-l border-gray-300 md:pl-8 space-y-4">
-                <p id="cart-item-count" class="text-2xl font-semibold text-gray-600">0 items</p>
-                <p id="cart-total-display" class="text-6xl font-playfair font-bold text-gray-900">$0</p>
-                
-                <button id="checkout-btn" class="btn-dark w-full py-3 rounded-md mt-4" onclick="checkout()">
-                    Buy Now
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        function addToCart(productId) {
-            const product = products.find(p => p.id === productId);
-            const cartItem = cart.find(item => item.id === productId);
-
-            if (product) {
-                if (cartItem) {
-                    cartItem.quantity += 1;
-                } else {
-                    cart.push({ ...product, quantity: 1 });
-                }
-                updateCartUI();
-            }
-        }
-
-        function updateCartQuantity(productId, delta) {
-            const cartItem = cart.find(item => item.id === productId);
-            if (!cartItem) return;
-
-            cartItem.quantity += delta;
-
-            if (cartItem.quantity <= 0) {
-                removeFromCart(productId);
-            }
-            updateCartUI();
-        }
-
-        function removeFromCart(productId) {
-            cart = cart.filter(item => item.id !== productId);
-            updateCartUI();
-        }
-
-        function calculateTotal() {
-            return cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        }
-
-        function updateCartUI() {
-            const container = document.getElementById('cart-items-container');
-            const totalElement = document.getElementById('cart-total-display');
-            const countElement = document.getElementById('cart-item-count');
-            const emptyMessage = document.getElementById('empty-cart-message');
+    
+       <!-- =================================================================
+        | 5. CART PAGE (Cart_Page.png)
+        ================================================================== -->
+        <div id="cart-page" class="page-view p-4 md:p-10 relative">
+            <header class="flex justify-start items-center mb-6">
+                <button class="btn-bsu" onclick="showPage('store-page')">Back</button>
+            </header>
             
-            const totalItems = cart.reduce((count, item) => count + item.quantity, 0);
-            const total = calculateTotal();
-
-            countElement.textContent = `${totalItems} items`;
-            totalElement.textContent = `$${Math.round(total)}`; // Matches $80 wireframe style
-            
-            if (cart.length === 0) {
-                emptyMessage.style.display = 'block';
-                container.innerHTML = '';
-            } else {
-                emptyMessage.style.display = 'none';
-                container.innerHTML = cart.map(item => `
-                    <div class="flex items-center space-x-6 p-4 border rounded-lg bg-white shadow-sm">
-                        <!-- Image -->
-                        <img src="https://placehold.co/100x75/ffffff/A80000.png?text=BOOK" 
-                             class="w-20 h-auto" alt="${item.name}">
-                        
-                        <!-- Details -->
-                        <div class="flex-grow">
-                            <p class="text-xl font-bold text-gray-900">${item.name}</p>
-                            <p class="text-sm text-gray-500">$${item.price.toFixed(2)} each</p>
-                        </div>
-                        
-                        <!-- Quantity Controls -->
-                        <div class="flex flex-col items-center">
-                            <button onclick="updateCartQuantity(${item.id}, 1)" class="text-3xl text-gray-700 hover:text-bsu-red leading-none">
-                                <i class="fas fa-chevron-up"></i>
-                            </button>
-                            <span class="text-2xl font-bold mx-3">${item.quantity}</span>
-                            <button onclick="updateCartQuantity(${item.id}, -1)" class="text-3xl text-gray-700 hover:text-bsu-red leading-none">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-
-                        <!-- Price -->
-                        <span class="text-2xl font-bold w-20 text-right text-bsu-red">$${(item.price * item.quantity).toFixed(2)}</span>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 flex-grow">
+                <!-- Left Column: Cart Items List -->
+                <div class="lg:col-span-2 space-y-4 overflow-y-auto max-h-[80vh]">
+                    <h2 class="text-3xl font-bold text-bsu-dark mb-4 border-b pb-2" style="border-color: var(--bsu-red);">Shopping Cart</h2>
+                    <div id="cart-items-list" class="space-y-6">
+                        <!-- Cart items rendered by JS -->
                     </div>
-                `).join('');
-            }
-        }
-        
-        function checkout() {
-            if (cart.length === 0) {
-                showMessageBox('Your cart is empty. Please add items before checking out.', 'error');
-                return;
-            }
-            const finalTotal = calculateTotal().toFixed(2);
-            showMessageBox(`Order placed! Total: $${finalTotal}. Thank you for supporting the BSU Bookstore!`, 'success');
-            
-            cart = [];
-            updateCartUI();
-            showPage('home-page');
-        }
-    </script>
 
+                    <!-- Scroll arrows are now less necessary as the list is scrollable -->
+                    <div class="flex flex-col items-center space-y-2 pt-6 hidden">
+                        <button class="text-5xl text-bsu-dark hover:text-bsu-red transition" onclick="scrollCartList(-1)">&wedge;</button>
+                        <button class="text-5xl text-bsu-dark hover:text-bsu-red transition" onclick="scrollCartList(1)">&vee;</button>
+                    </div>
+                </div>
+                
+                <!-- Right Column: Cart Summary -->
+                <div class="lg:col-span-1 flex flex-col items-center justify-center p-8 stat-card">
+                    <svg class="w-24 h-24 text-bsu-dark mb-6" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17 18c-1.11 0-2 .9-2 2s.89 2 2 2 2-.9 2-2-.89-2-2-2M1 2v2h2.71l3.65 7.59L10 16h8c.78 0 1.5-.5 1.73-1.25L22.12 7H7.43L6.09 4H1v-2zm7 16c-1.11 0-2 .9-2 2s.89 2 2 2 2-.9 2-2-.89-2-2-2z"/>
+                    </svg>
+                    <p id="cart-summary-count" class="text-xl font-medium text-bsu-dark mb-2">0 items</p>
+                    <p id="cart-summary-total" class="text-6xl font-extrabold text-bsu-dark mb-8">$0.00</p>
+                    <button class="btn-bsu bg-bsu-dark hover:bg-gray-700 text-lg w-full">Buy Now</button>
+                </div>
+            </div>
+        </div>
 
     <!-- =================================================================
     | 6. ABOUT US PAGE (About_Us.png)
